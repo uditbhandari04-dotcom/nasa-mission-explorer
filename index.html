@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Mission Explorer </title>
+    <style>
+        img {
+      max-width: 100%;
+      height: auto;
+    }
+        body {
+      text-align: center;
+    }
+    </style>
+</head>
+<body>
+
+    <h1>NASA Mission Explorer</h1>
+
+    <input type="date" id="dateInput">
+
+    <button onclick="getImage()">Search</button>
+
+    <p id="lding" style="display:none;">Loading...</p>
+
+    <div id="result"></div>
+
+</body>
+<script src="script.js"></script>
+</html>
