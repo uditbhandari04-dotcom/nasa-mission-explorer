@@ -1,31 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Mission Explorer </title>
-    <style>
-        img {
-      max-width: 100%;
-      height: auto;
-    }
-        body {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NASA Mission Explorer</title>
+
+  <style>
+    body {
       text-align: center;
+      font-family: Arial;
+      background: #f4f4f4;
     }
-    </style>
+
+    input, select, button {
+      margin: 10px;
+      padding: 8px;
+    }
+
+    #result {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 10px;
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
-    <h1>NASA Mission Explorer</h1>
+  <h1>NASA Mission Explorer</h1>
 
-    <input type="date" id="dateInput">
+  <input type="date" id="startDate">
+  <input type="date" id="endDate">
 
-    <button onclick="getImage()">Search</button>
+  <br>
 
-    <p id="lding" style="display:none;">Loading...</p>
+  <input type="text" id="searchInput" placeholder="Search by title..." oninput="searchData()">
 
-    <div id="result"></div>
+  <select id="sortOption" onchange="sortData()">
+    <option value="">Sort</option>
+    <option value="asc">Title A-Z</option>
+    <option value="desc">Title Z-A</option>
+  </select>
 
+  <br>
+
+  <button onclick="getImages()">Get Images</button>
+
+  <p id="loading" style="display:none;">Loading...</p>
+
+  <div id="result"></div>
+
+  <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
 </html>
