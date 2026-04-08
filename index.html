@@ -4,66 +4,220 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NASA Mission Explorer</title>
-
+ 
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
     body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      color: #222;
+      padding: 30px 20px;
+    }
+ 
+    header {
       text-align: center;
-      font-family: Arial;
-      background: #f4f4f4;
+      margin-bottom: 30px;
     }
-
-    input, select, button {
-      margin: 10px;
-      padding: 8px;
+ 
+    header h1 {
+      font-size: 2rem;
+      color: #1a1a2e;
     }
-
-    #result {
+ 
+    header p {
+      color: #666;
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+ 
+    .controls {
+      max-width: 860px;
+      margin: 0 auto 30px;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      gap: 12px;
+      align-items: flex-end;
+    }
+ 
+    .controls label {
+      display: block;
+      font-size: 0.78rem;
+      color: #555;
+      margin-bottom: 4px;
+    }
+ 
+    .controls input,
+    .controls select {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: #fafafa;
+      color: #222;
+      width: 100%;
+    }
+ 
+    .controls input:focus,
+    .controls select:focus {
+      outline: none;
+      border-color: #4a90d9;
+    }
+ 
+    .field      { flex: 1; min-width: 140px; }
+    .field-wide { flex: 2; min-width: 180px; }
+ 
+    button {
+      padding: 9px 22px;
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+ 
+    button:hover { background: #2e2e50; }
+ 
+    #stats {
+      max-width: 1100px;
+      margin: 0 auto 14px;
+      font-size: 0.85rem;
+      color: #666;
+      display: none;
+    }
+ 
+    #loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      display: none;
+    }
+ 
+    #result {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
     }
-
+ 
     .card {
       background: white;
-      padding: 10px;
-      width: 250px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
     }
-
-    img {
+ 
+    .card img {
       width: 100%;
-      border-radius: 10px;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
     }
+ 
+    .card iframe {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border: none;
+    }
+ 
+    .card-body {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+ 
+    .card-date  { font-size: 0.75rem; color: #888; }
+    .card-title { font-size: 0.95rem; font-weight: 600; color: #1a1a2e; }
+ 
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      padding: 0 14px 14px;
+    }
+ 
+    .btn-small {
+      flex: 1;
+      padding: 7px;
+      font-size: 0.82rem;
+      background: #f0f4f8;
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+ 
+    .btn-small:hover        { background: #e2e8f0; }
+    .btn-small.fav-active   { background: #fff0f0; border-color: #f87171; color: #e53e3e; }
+ 
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .controls { flex-direction: column; }
+      .field, .field-wide { min-width: 100%; }
+    }
+    body {
+    background-color: #1a1a2e;
+    background: url("https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3BhY2V8ZW58MHx8MHx8fDA%3D");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+}
   </style>
 </head>
-
-<body>
-
-  <h1>NASA Mission Explorer</h1>
-
-  <input type="date" id="startDate">
-  <input type="date" id="endDate">
-
-  <br>
-
-  <input type="text" id="searchInput" placeholder="Search by title..." oninput="searchData()">
-
-  <select id="sortOption" onchange="sortData()">
-    <option value="">Sort</option>
-    <option value="asc">Title A-Z</option>
-    <option value="desc">Title Z-A</option>
-  </select>
-
-  <br>
-
-  <button onclick="getImages()">Get Images</button>
-
-  <p id="loading" style="display:none;">Loading...</p>
-
+<body >
+ 
+  <header>
+    <h1 style="color: grey;">NASA Mission Explorer</h1>
+    <p>Browse NASA's Astronomy Picture of the Day archive</p>
+  </header>
+ 
+  <div class="controls" style="background-color:#888;">
+    <div class="field">
+      <label for="startDate">Start Date</label>
+      <input type="date" id="startDate">
+    </div>
+    <div class="field">
+      <label for="endDate">End Date</label>
+      <input type="date" id="endDate">
+    </div>
+    <div class="field-wide">
+      <label for="searchInput">Search</label>
+      <input type="text" id="searchInput" placeholder="Search by title..." oninput="searchData()">
+    </div>
+    <div class="field">
+      <label for="sortOption">Sort</label>
+      <select id="sortOption" onchange="sortData()">
+        <option value="">Default</option>
+        <option value="asc">Title A → Z</option>
+        <option value="desc">Title Z → A</option>
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+      </select>
+    </div>
+    <button onclick="getImages()">Get Images</button>
+  </div>
+ 
+  <div id="stats"></div>
+  <div id="loading">Loading...</div>
   <div id="result"></div>
-
+ 
   <script src="script.js"></script>
 </body>
 </html>
